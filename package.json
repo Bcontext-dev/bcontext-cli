@@ -1,0 +1,41 @@
+{
+  "name": "@bcontext/cli",
+  "version": "0.1.0",
+  "description": "bcontext / bx \u2014 the token-cheap CLI agent surface for Bcontext workspaces (search, cited ask, optimistic-concurrency writes, checklists, typed dependencies, change feed).",
+  "type": "module",
+  "bin": {
+    "bcontext": "dist/bin.js",
+    "bx": "dist/bin.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bcontext-dev/bcontext-cli.git"
+  },
+  "homepage": "https://bcontext.es/docs/cli",
+  "license": "MIT",
+  "keywords": [
+    "bcontext",
+    "cli",
+    "agents",
+    "mcp",
+    "knowledge-graph",
+    "rag"
+  ]
+}
