@@ -17,17 +17,22 @@ export async function update(ctx: CommandCtx): Promise<void> {
   const title = flagStr(ctx.flags, "title");
   const status = flagStr(ctx.flags, "status");
   const priority = flagStr(ctx.flags, "priority");
-  const category = flagStr(ctx.flags, "category");
   const parent = flagStr(ctx.flags, "parent");
+  const tagIds = csv(flagStr(ctx.flags, "tag-ids"));
+  if (ctx.flags.category !== undefined) {
+    fail("--category was removed. Replace the complete tag assignment with --tag-ids <id,id>.", 2);
+  }
   if (title !== undefined) patch.title = title;
   if (status !== undefined) patch.status = status;
   if (priority !== undefined) patch.priority = priority;
-  if (category !== undefined) patch.category = category;
-  if (parent !== undefined) patch.parent_id = parent;
+  // `root`, `none`, and `null` clear semantic hierarchy. Any other value is
+  // the id of a real parent node, never a container.
+  if (parent !== undefined) patch.parent_id = isRoot(parent) ? null : parent;
+  if (ctx.flags["tag-ids"] !== undefined) patch.tag_ids = tagIds;
   if (content_md !== undefined) patch.content_md = content_md;
 
   if (Object.keys(patch).length === 0) {
-    fail("nothing to update — pass at least one of --title/--md/--status/--priority/--parent", 2);
+    fail("nothing to update — pass at least one of --title/--md/--status/--priority/--parent/--tag-ids", 2);
   }
 
   const args: Record<string, unknown> = { id, patch };
@@ -49,4 +54,12 @@ export async function update(ctx: CommandCtx): Promise<void> {
     if (err instanceof AuthError) fail(err.message, 1);
     throw err;
   }
+}
+
+function csv(value: string | undefined): string[] {
+  return [...new Set((value ?? "").split(",").map((item) => item.trim()).filter(Boolean))].sort();
+}
+
+function isRoot(value: string): boolean {
+  return ["root", "none", "null"].includes(value.toLowerCase());
 }
