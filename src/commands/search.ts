@@ -2,6 +2,7 @@ import { flagStr } from "../args.js";
 import { AuthError } from "../client.js";
 import { fail, printResult } from "../output.js";
 import { type CommandCtx, requireArg } from "./_shared.js";
+import { buildRagScope } from "./scope.js";
 
 /**
  * `bcontext search <query> [--k 5] [--kind doc[,adr]]` → MCP search_nodes.
@@ -16,6 +17,8 @@ export async function search(ctx: CommandCtx): Promise<void> {
 
   const args: Record<string, unknown> = { query, limit };
   if (kindRaw) args.kinds = kindRaw.split(",").map((s) => s.trim()).filter(Boolean);
+  const scope = buildRagScope(ctx.flags);
+  if (scope) args.scope = scope;
 
   let data: { hits?: Array<Record<string, unknown>> };
   try {

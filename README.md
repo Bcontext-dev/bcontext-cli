@@ -29,6 +29,10 @@ Precedence: flags > env > config file.
 ```bash
 bx ask "what blocks the release and why?"   # synthesized answer, claims cited [N]; Sources on stderr
 bx search "auth migration" --kind decision,adr
+bx search "launch risk" --view <view-id>             # strict saved-view scope
+bx ask "what changed?" --tags-any product,tech       # strict tag scope
+bx ask "cross-cutting impact?" --auto --near <id>    # boosted neighborhood + visible global lane
+bx search "owner" --select <id,id> --broad           # selection; mark broad graph neighbors
 bx get <node-id>                            # node + backlinks + dependencies + attachments
 bx tree
 bx unblocked --kind task                    # ready work (no undone blockers)

@@ -229,10 +229,10 @@ Auth commands:
   logout                                      Clear stored token + workspace
 
 Read commands:
-  search <query> [--k 5] [--kind doc,adr]     Search — one hit per node, block refs nested
+  search <query> [--k 5] [scope flags]        Search — one hit per node, block refs nested
   get <id> [--block <slug>] [--md]            Fetch a node + links, dependencies, attachments
   tree [--depth N]                            List the workspace node tree
-  ask <question>                              Ask the workspace agent (streamed + sources)
+  ask <question> [scope flags]                Ask with cited retrieval
   changes [--since <iso>] [--limit 50]        Recent changes (incremental sync)
   unblocked [--kind task] [--status todo]     Tasks ready to start (no undone blockers)
 
@@ -258,6 +258,11 @@ Global options:
   --pretty              Human-readable output
   --help, -h            Show this help
   --version, -v         Print version
+
+RAG scope flags (search / ask):
+  --scope workspace|view|tags|selection|neighborhood|auto
+  --view <id> | --tags-any <a,b> | --tags-all <a,b> | --select <id,id>
+  --near <id,id> [--depth 1..3] | --auto [hints] | --broad
 
 Config precedence: flags > env (BCONTEXT_URL/TOKEN/WORKSPACE) > ${configPath()} > defaults
 `,

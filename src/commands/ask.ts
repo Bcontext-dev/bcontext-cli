@@ -2,6 +2,7 @@ import { flagBool } from "../args.js";
 import { AuthError, type ApiResponse } from "../client.js";
 import { fail, failResponse } from "../output.js";
 import type { CommandCtx } from "./_shared.js";
+import { buildRagScope } from "./scope.js";
 
 /**
  * `bcontext ask <question> [--no-synth] [--chat]`
@@ -30,13 +31,14 @@ export async function ask(ctx: CommandCtx): Promise<void> {
   }
 
   const synthesize = !flagBool(ctx.flags, "no-synth");
+  const scope = buildRagScope(ctx.flags);
   let data: {
     answer?: string | null;
     answer_note?: string;
     hits?: Array<{ n: number; title?: string; kind?: string; ref?: string; score?: number }>;
   };
   try {
-    data = await ctx.client.mcpCall("ask_rag", { query: question, synthesize }, ctx.workspace);
+    data = await ctx.client.mcpCall("ask_rag", { query: question, synthesize, ...(scope ? { scope } : {}) }, ctx.workspace);
   } catch (err) {
     if (err instanceof AuthError) fail(err.message, 1);
     throw err;
@@ -60,10 +62,12 @@ export async function ask(ctx: CommandCtx): Promise<void> {
 
 /** The previous behavior: stream the agentic /api/chat answer. */
 async function askChat(ctx: CommandCtx, question: string): Promise<void> {
+  const scope = buildRagScope(ctx.flags);
   const res = await ctx.client.stream("POST", "/api/chat", {
     body: {
       workspace: ctx.workspace,
       messages: [{ role: "user", content: question }],
+      ...(scope ? { scope } : {}),
     },
   });
 
