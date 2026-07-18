@@ -203,7 +203,8 @@ export class BcontextClient {
 
   /**
    * Verifies the token has access to `workspace` by hitting the existing
-   * agents/context route with an empty query (no retrieval, just the tree).
+   * agents/context route with an empty query (no retrieval, just the
+   * workspace's semantic node hierarchy and tags).
    * Returns the resolved workspace slug on success.
    */
   async verify(workspace: string): Promise<{ workspace: string }> {

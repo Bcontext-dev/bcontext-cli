@@ -48,7 +48,7 @@ export const COMMAND_SPECS: Record<string, CommandSpec> = {
     method: "POST",
     path: "/api/agents/context",
     scope: "agents:read",
-    summary: "List the workspace node tree.",
+    summary: "Compatibility view of semantic node hierarchy plus reusable tags.",
   },
   ask: {
     method: "POST",

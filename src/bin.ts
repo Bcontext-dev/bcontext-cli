@@ -231,14 +231,14 @@ Auth commands:
 Read commands:
   search <query> [--k 5] [scope flags]        Search — one hit per node, block refs nested
   get <id> [--block <slug>] [--md]            Fetch a node + links, dependencies, attachments
-  tree [--depth N]                            List the workspace node tree
+  tree [--depth N]                            Semantic hierarchy + tags (deprecated command name)
   ask <question> [scope flags]                Ask with cited retrieval
   changes [--since <iso>] [--limit 50]        Recent changes (incremental sync)
   unblocked [--kind task] [--status todo]     Tasks ready to start (no undone blockers)
 
 Write commands:
-  create --kind <k> --title <t> [--parent <id>] [--md -]
-  update <id> [--title ..] [--md -] [--status ..] [--if-updated-at <ts>]
+  create --kind <k> --title <t> [--tag-ids <id,id>] [--parent <real-node-id>] [--md -]
+  update <id> [--tag-ids <id,id>] [--parent <real-node-id|root>] [--if-updated-at <ts>]
   link <from-id> <to-id> [--relation blocked_by|references|caused_by|relates_to]
   unlink <from-id> <to-id> [--relation <r>]
   toggle <node-id> <index> [--block <slug>] [--on|--off]
@@ -249,6 +249,7 @@ Escape hatch:
   mcp <tool> ['<json-args>']                  Call any MCP tool directly
 
 Read from stdin with '--md -'  (e.g.  echo "# Hi" | bcontext create --kind doc --title Hi --md -).
+Tags replace containers. --parent expresses optional hierarchy between real nodes only.
 
 Global options:
   --url <url>           API base URL (default https://bcontext.es)

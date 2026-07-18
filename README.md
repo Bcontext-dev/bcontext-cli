@@ -34,7 +34,7 @@ bx ask "what changed?" --tags-any product,tech       # strict tag scope
 bx ask "cross-cutting impact?" --auto --near <id>    # boosted neighborhood + visible global lane
 bx search "owner" --select <id,id> --broad           # selection; mark broad graph neighbors
 bx get <node-id>                            # node + backlinks + dependencies + attachments
-bx tree
+bx tree                                      # deprecated name: semantic hierarchy + tags
 bx unblocked --kind task                    # ready work (no undone blockers)
 bx changes --since 2026-07-06T10:00:00Z     # incremental change feed
 ```
@@ -42,13 +42,21 @@ bx changes --since 2026-07-06T10:00:00Z     # incremental change feed
 ## Write
 
 ```bash
-bx create --kind decision --title "Postgres over ClickHouse"   # H2 skeleton pre-filled
+bx create --kind decision --title "Postgres over ClickHouse" --tag-ids <architecture-tag-id>
 echo "## Notes" | bx create --kind doc --title "Notes" --md -
+bx update <id> --tag-ids <product-id,tech-id>                  # replaces complete tag assignment
 bx update <id> --status done --if-updated-at <updated_at>      # 409 on conflict: re-fetch, rebase, retry
 bx toggle <node-id> 2 --block action-items                     # atomic checkbox flip
 bx link <task-id> <blocker-id> --relation blocked_by
 bx attach <node-id> screenshot.png
 ```
+
+Nodes use fixed real kinds (`doc`, `task`, `decision`, `meeting`, `bug`,
+`adr`, `entity`, `skill`). Reusable tags replace single-purpose containers and a
+node can carry several. Resolve/create tags first (`bx mcp list_tags '{}'`),
+then pass their stable ids with `--tag-ids`. `--parent` is optional semantic hierarchy between real nodes
+(for example epic/subtask or document/part), never filesystem placement;
+`bx update <id> --parent root` clears it.
 
 ## Escape hatch
 
