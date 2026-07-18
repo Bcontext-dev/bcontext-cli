@@ -25,6 +25,8 @@ export const BOOLEAN_FLAGS = new Set([
   "on",
   "off",
   "no-links",
+  "auto",
+  "broad",
 ]);
 
 const SHORT_ALIASES: Record<string, string> = {
